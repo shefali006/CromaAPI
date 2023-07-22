@@ -64,10 +64,10 @@ app.get('/subCategory',async(req,res)=>{
 //getting data of all products according to differnt conditions
 app.get('/products',async(req,res)=>{
     let query={};
-    if(req.query.categoryid && req.query.subcategoryid){
-        query={category_id:Number(req.query.categoryid),sub_category_id:Number(req.query.subcategoryid)}
-     }
-    else if(req.query.categoryid){
+    // if(req.query.categoryid && req.query.subcategoryid){
+    //     query={category_id:Number(req.query.categoryid),sub_category_id:Number(req.query.subcategoryid)}
+    //  }
+    if(req.query.categoryid){
         query={category_id:Number(req.query.categoryid)}
      }
      else{
@@ -77,6 +77,31 @@ app.get('/products',async(req,res)=>{
      let collection="products";
      let output=await getData(collection,query);
      res.send(output);
+})
+
+//Filters
+app.get('/filter/:category_id', async(req,res) => {
+    let category_id = Number(req.params.category_id);
+    let sub_category_id = Number(req.query.sub_category_id)
+    let lcost = Number(req.query.lcost)
+    let hcost = Number(req.query.hcost)
+    if(sub_category_id){
+        query = {
+            "category_id":category_id,
+            "sub_category_id":sub_category_id
+        }
+    }else if(lcost && hcost){
+        query = {
+            "category_id":category_id,
+            $and:[{product_price:{$gt:lcost,$lt:hcost}}]
+        }
+    }
+    else{
+        query = {}
+    }
+    let collection = "products";
+    let output = await getData(collection,query);
+    res.send(output)
 })
 
 //getting orders
