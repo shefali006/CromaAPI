@@ -104,6 +104,15 @@ app.get('/filter/:category_id', async(req,res) => {
     res.send(output)
 })
 
+//details of products
+app.get('/details/:id',async(req,res) => {
+     let id = Number(req.params.id);
+     let query ={product_id:id}
+     let collection="products";
+     let output = await getData(collection,query);
+     res.send(output);
+})
+
 //getting orders
 app.get('/orders',async(req,res) => {
     let query = {};
