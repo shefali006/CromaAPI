@@ -97,8 +97,8 @@ app.get('/filter/:category_id', async(req,res) => {
         }
     }
     else{
-        query = {}
-    }
+        query={"category_id":category_id}
+     }
     let collection = "products";
     let output = await getData(collection,query);
     res.send(output)
